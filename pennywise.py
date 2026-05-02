@@ -150,6 +150,12 @@ class PennywiseEnv(AECEnv):
             pygame.init()
 
         if self.render_mode == "human":
+            self.state["event"] = {
+                "agent": '',
+                "spent": [0,0,0,0],
+                "gained": [0,0,0,0]
+            }
+
             self.screen = pygame.display.set_mode(
                 (self.screen_width, self.screen_height)
             )
@@ -160,6 +166,13 @@ class PennywiseEnv(AECEnv):
                     get_image(os.path.join("img", "dime.png")),
                     get_image(os.path.join("img", "quarter.png"))]
             self._coin_img = [pygame.transform.scale(i, (SCALE, SCALE)) for i in self._coin_img]
+
+            self.font = pygame.font.SysFont(None, 48)
+            self.title = self.font.render('Actions', True, (255, 255, 255))
+            self.big_font = pygame.font.SysFont(None, 64)
+            self.ai_choice = self.big_font.render('AI', True, (0, 0, 0))
+            self.plus = self.big_font.render('+', True, (0, 220, 0))
+            self.plus_shadow = self.big_font.render('+', True, (0, 0, 0))
 
     def step(self, action):
         agent = self.agent_selection
@@ -244,12 +257,21 @@ class PennywiseEnv(AECEnv):
         # 2. Claim any possible coins
         spent = value = self._action_value[action]
         got = 0
+        if self.render_mode == "human":
+            self.state["event"] = {
+                "agent": agent,
+                "spent": [0,0,0,0],
+                "gained": [0,0,0,0]
+            }
+            self.state["event"]["spent"][action] = 1
         for i in [2, 1, 0]:
             cval = self._action_value[i]
             while value > cval and pot[i] > 0:
                 value -= cval
                 pot[i] -= 1
                 inventory[i] += 1
+                if self.render_mode == "human":
+                    self.state["event"]["gained"][i] += 1
                 got += 1
 
         # 3. Put the picked coin into pot
@@ -268,28 +290,40 @@ class PennywiseEnv(AECEnv):
         if self.render_mode == "human":
             self.screen.fill((0, 0, 0))
 
-            def draw_one(inv, loc, curr):
+            def draw_plus(loc):
+                self.screen.blit(self.plus_shadow, (loc[0]-1, loc[1]-1))
+                self.screen.blit(self.plus_shadow, (loc[0]+1, loc[1]+1))
+                self.screen.blit(self.plus, loc)
+            def draw_one(inv, loc, curr, highlight):
                 if curr:
                     pygame.draw.rect(self.screen, (100, 100, 100), (loc[0], loc[1], SCALE*8, SCALE*4))
                 for i, c in enumerate(inv):
+                    defaults = c - highlight[i]
                     for j in range(c):
                         self.screen.blit(self._coin_img[i], (loc[0] + SCALE//2 * j, loc[1] + SCALE * i))
-            draw_one(self.state['pot'], (screen_width//2 - SCALE//2 * 8, screen_height//2 - SCALE*2), False)
+                    for j in range(c):
+                        if j >= defaults:
+                            draw_plus((loc[0] + SCALE // 2 * j + SCALE/2, loc[1] + SCALE * i + SCALE/4))
+            draw_one(self.state['pot'], (screen_width//2 - SCALE//2 * 8, screen_height//2 - SCALE*2), False, self.state['event']['spent'])
             for i, a in enumerate(self.agents):
                 draw_one(self.state['players'][a], (width[i%4] * (screen_width - SCALE*8),
-                                                    height[i%4] * (screen_height - SCALE*5)), agent == a)
+                                                    height[i%4] * (screen_height - SCALE*5)), agent == a,
+                         self.state['event']['gained'] if a == self.state['event']['agent'] else [0,0,0,0])
 
             # 3. Draw the Action Buttons (Only highlight valid ones for the current player)
             mask = self._generate_action_mask(agent)
 
+            self.screen.blit(self.title, (screen_width/2 - 100, 5))
             for i, rect in enumerate(self.action_rects):
                 if i == 4:
                     color = (200, 200, 0)
                 else:
                     color = (0, 200, 0) if mask[i] == 1 else (100, 100, 100)  # Green if valid, Grey if invalid
                 pygame.draw.rect(self.screen, color, rect)
-                # self.screen.blit(self._coin_img[i], (rect.x + 10, rect.y + 15))
-
+                if i < 4:
+                    self.screen.blit(self._coin_img[i], (rect.x + 1, rect.y + 1))
+                else:
+                    self.screen.blit(self.ai_choice, (rect.x + 4, rect.y + 12))
                 # self.clock.tick(self.metadata["render_fps"])
 
             pygame.display.flip()
