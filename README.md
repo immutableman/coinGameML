@@ -51,7 +51,7 @@ At first, we tried to train the AI using *self-play*, where it played against it
 
 ### Starting Conditions
 
-*TODO GET THE ACTUAL NUMBERS* The last major improvement was in the starting conditions. Because the AI always was the 1st player, it wasn't winning! It turns out that if everyone plays randomly, the first player wins a bit more than 15% of the time, and the last player wins over 30% of the time.
+The last major improvement was in the starting conditions. Because the AI always was the 1st player, it wasn't winning very much! If everyone plays randomly, the first player wins about 14% of the time, and the last player 34% of the time. This lead the AI to assume it needed "hail mary" plays to have a chance of winning.
 
 My son's suggestion to solve this was pretty brilliant: start training the AI as if the game was already in progress. 25% of the time the pot starts empty, but the rest of the time it starts with some coins already in it, as if other players had already gone. This removed the first player disadvantage, which meant the AI was able to win more games and learn better plays.
 
@@ -61,4 +61,4 @@ PettingZoo already has built in support to render a game that is being played. W
 
 ## AI Disclosure
 
-AI Helped us make this AI! We used Google Gemini frequently to ask for ideas and code snippets. Parts of the code in this repository are copied from Gemini.
+AI helped us make this AI! We used Google Gemini frequently to ask for ideas and code snippets. Parts of the code in this repository are copied from Gemini.
