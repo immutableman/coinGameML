@@ -35,7 +35,7 @@ We settled on using an old version of TianShou (0.5.0) as we found an existing t
 
 Very roughly, the neural network "learns" to play the game by looking at the game state (how many coins are in everyone's hands, and how many are in the pot), and then choosing an action.
 After the game is over, it looks back at all of the choices it made. If it _won_, it treats those choices as "potentially good". If it _lost_, it treats those choices as "potentially bad".
-At first, it is playing randomly. But it repeats that process thousands of times, and slowly the "good" choices start to form mathmatical patterns that add up to something that looks
+At first, it is playing randomly. But it repeats that process thousands of times, and slowly the "good" choices start to form mathmatical  patterns that add up to something that looks
 reasonable!
 
 <img alt="Epoch information from Tianshou" src="readme/epoch.png"> _The 1st and 2nd epoch of a training run, each with 1000 games._
@@ -57,7 +57,7 @@ At first, we tried to train the AI using *self-play*, where it played against it
 
 ### Starting Conditions
 
-The last major improvement was in the starting conditions. Because the AI always was the 1st player, it wasn't winning very much! If everyone plays randomly, the first player wins about 14% of the time, and the last player 34% of the time. This lead the AI to assume it needed "hail mary" plays to have a chance of winning.
+The last major improvement was in the starting conditions. Because the AI always was the 1st player, it wasn't winning very much! If everyone plays randomly, the first player wins about 14% of the time, and the last player 34% of the time. This led the AI to assume it needed "hail mary" plays to have a chance of winning.
 
 My son's suggestion to solve this was pretty brilliant: start training the AI as if the game was already in progress. 25% of the time the pot starts empty, but the rest of the time it starts with some coins already in it, as if other players had already gone. This removed the first player disadvantage, which meant the AI was able to win more games and learn better plays.
 
