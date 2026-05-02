@@ -58,3 +58,7 @@ My son's suggestion to solve this was pretty brilliant: start training the AI as
 ## Playing: PyGame
 
 PettingZoo already has built in support to render a game that is being played. With a bit of clever code, we hooked up buttons that allow a human to either pick a coin to play, or to let the AI decide.
+
+## AI Disclosure
+
+AI Helped us make this AI! We used Google Gemini frequently to ask for ideas and code snippets. Parts of the code in this repository are copied from Gemini.
