@@ -6,6 +6,8 @@ My son discovered the game in Ben Orlin's [Math Games with Bad Drawings](https:/
 
 With a lot of internet searching and trial and error, we got to place where the AI is officially Not Bad (tm).
 
+<img alt="visual of the game running with a trained AI" src="readme/running_game.png" width=900>
+
 ## Our Approach
 
 We had 3 big areas to solve:
