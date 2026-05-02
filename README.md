@@ -65,6 +65,14 @@ My son's suggestion to solve this was pretty brilliant: start training the AI as
 
 PettingZoo already has built in support to render a game that is being played. With a bit of clever code, we hooked up buttons that allow a human to either pick a coin to play, or to let the AI decide.
 
+When you let the AI pick, we print out the logits. These represent the confidence that the AI has in each possible action. For our program, we always pick the highest one, but if you think that the AI made a mistake, you can look at the action and see if it was a close decision.
+<code>
+AI Q-Values:     -0.161     -0.233   [ -0.147]    -0.323 
+AI Q-Values:   [  0.074]    -0.007     -0.119     -0.216 
+AI Q-Values:      0.042   [  0.174]     0.007     -0.057 
+AI Q-Values:   [  0.065]    -0.044     -0.107     -0.268 
+</code>
+
 ## AI Disclosure
 
 AI helped us make this AI! We used Google Gemini frequently to ask for ideas and code snippets. Parts of the code in this repository are copied from Gemini.
