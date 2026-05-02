@@ -39,7 +39,22 @@ def do_ai(policy, observation):
     )
 
     result = policy(batch)
-    return result.act[0]
+
+    # Extract the Q-values for the 4 actions (convert to PyTorch tensor)
+    action = result.act[0]
+    q_values = result.logits[0].detach().clone()
+    desc = "AI Q-Values: "
+    for i, v in enumerate(q_values):
+        if i == action:
+            a = '['
+            b = ']'
+        else:
+            a = ' '
+            b = ' '
+        desc += f"  {a}{v:7.3f}{b}"
+    print(f"{desc}")
+
+    return action
 
 
 if __name__ == "__main__":
