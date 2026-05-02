@@ -1,6 +1,6 @@
 # Coin ML -- Creating an AI to play Pennywise
 
-While playing Pennywise with my son, we were inspired to see if we could create an AI that was able to play the game "decently well"--that is, good enough it could compete with us.
+While playing James Ernest's game [Pennywise](https://www.youtube.com/watch?v=eyE1CzW_Rcs) with my son, we were inspired to see if we could create an AI that was able to play the game "decently well"--that is, good enough it could compete with us.
 
 My son discovered the game in Ben Orlin's [Math Games with Bad Drawings](https://mathwithbaddrawings.com/2022/01/19/math-games-with-bad-drawings-2/)
 
