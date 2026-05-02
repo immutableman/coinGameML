@@ -41,13 +41,13 @@ reasonable!
 This was all good in theory, but in practice it was failing. A lot. Even with a lot of training, the AI was doing stupid things, like starting by playing a quarter, or ignoring a juicy play
 in favor of feeding pennies to a neighbor.
 
-There were at least 3 really important things we learned that helped us get to a good AI: a *good heuristic*, *league play*, *randomized starting conditions*.
+There were at least 3 really important things we learned that helped us train the AI: a *good heuristic*, *league play*, and *randomized starting conditions*.
 
 ### Heuristic Rewards
 
 One big issue when a computer tries to learn to play a game is that it either wins or loses. And when there are 4 players, it loses  a _lot_. This is a problem for us, because it wasn't finding enough "potentially good" moves to play.
 
-It's possible that we could solve this by training the AI even more (with millions of games!), but we wanted a short-cut. My son proposed a simple heuristic to help the AI recogize if a move was good or bad. Rather than only rewarding wins, we also give a tiny reward for making "reasonable" plays. We look at the value _gained_ divided by the value _spent_ (for example, if you play a nickel and take 3 pennies, you get a mini-reward of 0.6; if you play a dime and take nothing, you get a mini-reward of 0). We tried a few other heuristics, but this 'value' metric worked the best in our tests.
+It's possible that we could solve this by training the AI even more (with millions of games!), but we wanted a shortcut. My son proposed a simple heuristic to help the AI recogize if a move was good or bad. Rather than only rewarding wins, we also give a tiny reward for making "reasonable" plays. We look at the value _gained_ divided by the value _spent_ (for example, if you play a nickel and take 3 pennies, you get a mini-reward of 0.6; if you play a dime and take nothing, you get a mini-reward of 0). We tried a few other heuristics, but this 'value' metric worked the best in our tests.
 
 ### League Play
 
