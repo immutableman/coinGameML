@@ -23,6 +23,8 @@ We started with PettingZoo. PettingZoo is a library that makes it easy for compu
 2. It gave us an example of a simple game (tictactoe) we could start with
 3. It has a built in API for _rendering_ the game, which meant we could see the results of our game in a human friendly way.
 
+<img alt="Tic-tac-toe animation from PettingZoo" src="readme/classic_tictactoe.gif" width=128>
+
 ## Training: TianShou
 https://tianshou.org/en/stable/
 
@@ -33,6 +35,8 @@ Very roughly, the neural network "learns" to play the game by looking at the gam
 After the game is over, it looks back at all of the choices it made. If it _won_, it treats those choices as "potentially good". If it _lost_, it treats those choices as "potentially bad".
 At first, it is playing randomly. But it repeats that process thousands of times, and slowly the "good" choices start to form mathmatical patterns that add up to something that looks
 reasonable!
+
+<img alt="Epoch information from Tianshou" src="readme/epoch.png"> _The 1st and 2nd epoch of a training run, each with 1000 games._
 
 This was all good in theory, but in practice it was failing. A lot. Even with a lot of training, the AI was doing stupid things, like starting by playing a quarter, or ignoring a juicy play
 in favor of feeding pennies to a neighbor.
