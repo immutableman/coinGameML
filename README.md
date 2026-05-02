@@ -73,6 +73,12 @@ AI Q-Values:      0.042   [  0.174]     0.007     -0.057
 AI Q-Values:   [  0.065]    -0.044     -0.107     -0.268 
 </code>
 
+# The Code
+...is a bit of a mess. We didn't originally intend to make it public, but it was too cool not to share. The key files are:
+* [pennywise.py](pennywise.py) has the PettingZoo environment
+* [main_pennywise.py](main_pennywise.py) has the TianShou training. there are a lot of parameters, our final run used `--league --epoch=1000 --train-agents 0 1 1 1 --test-agents 0 3 3 3`
+* [play.py](play.py) allows humans to play and see the AI play step-by-step
+
 ## AI Disclosure
 
 AI helped us make this AI! We used Google Gemini frequently to ask for ideas and code snippets. Parts of the code in this repository are copied from Gemini.
