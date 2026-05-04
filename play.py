@@ -42,17 +42,18 @@ def do_ai(policy, observation):
 
     # Extract the Q-values for the 4 actions (convert to PyTorch tensor)
     action = result.act[0]
-    q_values = result.logits[0].detach().clone()
-    desc = "AI Q-Values: "
-    for i, v in enumerate(q_values):
-        if i == action:
-            a = '['
-            b = ']'
-        else:
-            a = ' '
-            b = ' '
-        desc += f"  {a}{v:7.3f}{b}"
-    print(f"{desc}")
+    if hasattr(result, 'logits'):
+        q_values = result.logits[0].detach().clone()
+        desc = "AI Q-Values: "
+        for i, v in enumerate(q_values):
+            if i == action:
+                a = '['
+                b = ']'
+            else:
+                a = ' '
+                b = ' '
+            desc += f"  {a}{v:7.3f}{b}"
+        print(f"{desc}")
 
     return action
 
@@ -61,7 +62,7 @@ if __name__ == "__main__":
     args = main_pennywise.get_args()
 
     # 1. Initialize environment and reset
-    env = pennywise.env(clean_start=True, render_mode="human")
+    env = pennywise.env(num_players=args.num_players, clean_start=True, render_mode="human")
     env.reset()
 
     policy, optim, agents = main_pennywise.get_agents(

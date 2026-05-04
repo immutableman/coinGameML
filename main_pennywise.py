@@ -26,6 +26,7 @@ from torch.utils.tensorboard import SummaryWriter
 
 def get_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser()
+    parser.add_argument("--num-players", type=int, default=4)
     parser.add_argument("--seed", type=int, default=1629)
     parser.add_argument("--eps-test", type=float, default=0.001)
     parser.add_argument("--eps-train", type=float, default=0.5)

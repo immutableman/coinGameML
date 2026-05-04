@@ -31,10 +31,11 @@ SCALE = 64
 
 class PennywiseEnv(AECEnv):
     def __init__(
-        self, clean_start: bool = False, render_mode: str | None = None, screen_height: int | None = 1000
+        self, num_players: int = 4, clean_start: bool = False, render_mode: str | None = None, screen_height: int | None = 1000
     ):
         super().__init__()
-        self.agents = ["player_0", "player_1", "player_2", "player_3"]
+        self.num_players = num_players
+        self.agents = ["player_0", "player_1", "player_2", "player_3"][:num_players]
         self.possible_agents = self.agents[:]
 
         # play penny, nickel, dime, quarter. assume you must take most valuable change.
@@ -47,7 +48,7 @@ class PennywiseEnv(AECEnv):
         self.observation_spaces = {
             a: spaces.Dict({
                 # 20 integers: 4+1 for Pot + (4+1 for each of the 4 players)
-                "observation": spaces.MultiDiscrete([120] * 25),
+                "observation": spaces.MultiDiscrete([120] * (5+5*num_players)),
                 "action_mask": #spaces.Box(0, 1, shape=(self.TOTAL_ACTIONS,), dtype=np.int8)
                 spaces.Discrete(4)
             }) for a in self.agents
@@ -87,13 +88,13 @@ class PennywiseEnv(AECEnv):
         # Shift the array so the current 'agent' is always the first inventory block
         agent_idx = self.agents.index(agent)
         ordered_inventories = []
-        for i in range(4):
-            idx = (agent_idx + i) % 4
+        for i in range(self.num_players):
+            idx = (agent_idx + i) % self.num_players
             inv = self.state["players"][self.agents[idx]]
             ordered_inventories.extend(inv)
             ordered_inventories.append(self.value(inv))
 
-        # Flatten into a single 20-element array
+        # Flatten array
         obs = np.array(pot + [self.value(pot)] + ordered_inventories, dtype=np.int32)
 
         # Calculate which of the actions are actually legal right now
@@ -130,10 +131,14 @@ class PennywiseEnv(AECEnv):
                 "scores": {a: 0 for a in self.agents}
             }
         else:
-            pot = random.choices([[0,0,0,0],[1,0,0,0],[0,1,0,0],[2,0,0,0],[0,1,0,0],[1,1,0,0],[3,0,0,0],[0,1,0,0],[1,1,0,0],[0,0,1,0]],
-                                   [1,      0.5,    0.5,    0.25,   0.5,    0.25,   0.25,   0.25,   0.25,   0.25])
+            # TODO seed for 2-p
+            if self.num_players == 4:
+                pot = random.choices([[0,0,0,0],[1,0,0,0],[0,1,0,0],[2,0,0,0],[0,1,0,0],[1,1,0,0],[3,0,0,0],[0,1,0,0],[1,1,0,0],[0,0,1,0]],
+                                       [1,      0.5,    0.5,    0.25,   0.5,    0.25,   0.25,   0.25,   0.25,   0.25])[0]
+            else:
+                pot = [0,0,0,0]
             self.state = {
-                "pot": pot[0],
+                "pot": pot,
                 "players": {a: [random.randint(3,4),
                                 random.randint(2,3),
                                 2,
