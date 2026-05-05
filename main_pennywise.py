@@ -152,8 +152,8 @@ def get_agents(
     policy = MultiAgentPolicyManager(agents, env)
     return policy, optim, env.agents
 
-def get_env(clean_start=False, render_mode=None):
-    return PettingZooEnv(pennywise.env(clean_start=clean_start, render_mode=render_mode))
+def get_env(num_players=4, clean_start=False, render_mode=None):
+    return PettingZooEnv(pennywise.env(num_players=args.num_players, clean_start=clean_start, render_mode=render_mode))
 
 
 def train_agent(
@@ -248,6 +248,15 @@ def train_agent(
         # policy.policies[agents[args.agent_id - 1]].set_eps(args.eps_test)
         test_policy.policies[agents[0]].set_eps(args.eps_test)
         # policy.policies[agents[0]].set_eps(args.eps_test)
+        #
+        # if args.league:
+        #     best_opponent = league_pool[-1]
+        #
+        #     # Inject the new roster into Tianshou's active MultiAgent manager
+        #     # (Assuming your env.agents is a list like ['player_0', 'player_1', 'player_2', 'player_3'])
+        #     for idx, agent_id in enumerate(env.agents):
+        #         if idx > 0:
+        #             policy.policies[agent_id] = best_opponent
 
     def reward_metric(rews):
         return rews[:, 0]
@@ -293,7 +302,7 @@ def watch(
         watchc = args.test_num
 
     def ge():
-        return get_env(clean_start=True, render_mode=mode)
+        return get_env(num_players=args.num_players, clean_start=True, render_mode=mode)
     test_envs = DummyVectorEnv([ge for _ in range(watchc)])
     # FORCE RANDOM SEEDS: Give each of the 10 environments a unique, random seed
     random_seeds = [np.random.randint(0, 100000) for _ in range(watchc)]
@@ -310,10 +319,8 @@ def watch(
     collector = Collector(policy, test_envs, exploration_noise=True)
     result = collector.collect(n_episode=watchc, render=render)
     rews, lens = result["rews"], result["lens"]
-    print(f"P1 reward: {rews[:, 0].mean()}, length: {lens.mean()}")
-    print(f"P2 reward: {rews[:, 1].mean()}, length: {lens.mean()}")
-    print(f"P3 reward: {rews[:, 2].mean()}, length: {lens.mean()}")
-    print(f"P4 reward: {rews[:, 3].mean()}, length: {lens.mean()}")
+    for i in range(args.num_players):
+        print(f"P1 reward: {rews[:, i].mean()}, length: {lens.mean()}")
     # print(f"Final reward: {rews[:, args.agent_id - 1].mean()}, length: {lens.mean()}")
 
 
