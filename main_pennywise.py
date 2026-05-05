@@ -320,7 +320,7 @@ def watch(
     result = collector.collect(n_episode=watchc, render=render)
     rews, lens = result["rews"], result["lens"]
     for i in range(args.num_players):
-        print(f"P1 reward: {rews[:, i].mean()}, length: {lens.mean()}")
+        print(f"P{i+1} reward: {rews[:, i].mean()}, length: {lens.mean()}")
     # print(f"Final reward: {rews[:, args.agent_id - 1].mean()}, length: {lens.mean()}")
 
 
